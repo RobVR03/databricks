@@ -44,27 +44,24 @@ voorbeeld.size
 
 import torch
 from torch.utils.data import Dataset
-class SteelDefectDataset(Dataset):
-    def __init__(self, image_files, labels, transform=None):
-        self.image_files = image_files
+# Custom Dataset Class
+class LeadIngotDataset(Dataset):
+    def __init__(self, image_paths, images, labels, transform=None):
+        self.image_paths = image_paths
         self.labels = labels
+        self.images = images  
         self.transform = transform
 
     def __len__(self):
-        return len(self.image_files)
+        return len(self.image_paths)
 
     def __getitem__(self, idx):
-        img_path = str(self.image_files[idx])
-        image = Image.open(img_path).convert('RGB')
-        
-        # Get the label for this image
-        image_id = self.image_files[idx].name  # Assuming the filename is the ImageId
-        label = self.labels.get(image_id)
-        
+        image = self.images[idx]
+        label = self.labels[idx]
         if self.transform:
             image = self.transform(image)
-        
         return image, label
+
 
 # COMMAND ----------
 
